@@ -1,13 +1,5 @@
-// =================================================
-// Head First OOAD - Movie Inventory
-// Single File Implementation (Clean Code)
-// =================================================
-
-
-
-// =================================================
 // Class MovieSpec
-// =================================================
+
 class MovieSpec {
   constructor(studio, title, genre, director, rating) {
     this.studio = studio;
@@ -34,11 +26,8 @@ class MovieSpec {
   }
 }
 
-
-
-// =================================================
 // Class Movie
-// =================================================
+
 class Movie {
   constructor(serialNumber, price, spec) {
     this.serialNumber = serialNumber;
@@ -52,11 +41,8 @@ class Movie {
   getSpec() { return this.spec; }
 }
 
-
-
-// =================================================
 // Class Inventory
-// =================================================
+
 class Inventory {
   constructor() {
     this.movies = [];
@@ -79,14 +65,33 @@ class Inventory {
   }
 }
 
+// Tampilan Output
 
+function printMovies(movies) {
+  if (movies.length === 0) {
+    console.log("Tidak ada film yang ditemukan.\n");
+    return;
+  }
 
-// =================================================
+  movies.forEach((movie, index) => {
+    const spec = movie.getSpec();
+    console.log(`
+Film ${index + 1}
+Judul    : ${spec.getTitle()}
+Studio   : ${spec.getStudio()}
+Genre    : ${spec.getGenre()}
+Director : ${spec.getDirector()}
+Rating   : ${spec.getRating()}
+Harga    : $${movie.getPrice()}
+----------------------------------
+`);
+  });
+}
+
 // Main Program
-// =================================================
+
 const inventory = new Inventory();
 
-// Data Movie
 inventory.addMovie(
   "M001",
   15,
@@ -117,18 +122,13 @@ inventory.addMovie(
   new MovieSpec("Pixar", "Toy Story", "Animation", "John Lasseter", "G")
 );
 
+// Cara Pakai
 
-// =================================================
-// Search Examples
-// =================================================
-const actionSpec = new MovieSpec(null, null, "Action", null, null);
-console.log("🎬 Semua film Action:");
-console.log(inventory.search(actionSpec));
+console.log("Semua film Action:");
+printMovies(inventory.search(new MovieSpec(null, null, "Action", null, null)));
 
-const nolanSpec = new MovieSpec(null, null, null, "Christopher Nolan", null);
-console.log("\n🎥 Film Christopher Nolan:");
-console.log(inventory.search(nolanSpec));
+console.log("Film Christopher Nolan:");
+printMovies(inventory.search(new MovieSpec(null, null, null, "Christopher Nolan", null)));
 
-const interstellarSpec = new MovieSpec("Paramount", "Interstellar", null, null, null);
-console.log("\n🚀 Interstellar ditemukan:");
-console.log(inventory.search(interstellarSpec));
+console.log("Interstellar ditemukan:");
+printMovies(inventory.search(new MovieSpec("Paramount", "Interstellar", null, null, null)));
