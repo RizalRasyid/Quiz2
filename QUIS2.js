@@ -1,134 +1,155 @@
-// Class MovieSpec
-
-class MovieSpec {
-  constructor(studio, title, genre, director, rating) {
-    this.studio = studio;
-    this.title = title;
-    this.genre = genre;
-    this.director = director;
-    this.rating = rating;
-  }
-
-  getStudio() { return this.studio; }
-  getTitle() { return this.title; }
-  getGenre() { return this.genre; }
-  getDirector() { return this.director; }
-  getRating() { return this.rating; }
-
-  matches(otherSpec) {
-    if (otherSpec.getStudio() && this.studio !== otherSpec.getStudio()) return false;
-    if (otherSpec.getTitle() &&
-        this.title.toLowerCase() !== otherSpec.getTitle().toLowerCase()) return false;
-    if (otherSpec.getGenre() && this.genre !== otherSpec.getGenre()) return false;
-    if (otherSpec.getDirector() && this.director !== otherSpec.getDirector()) return false;
-    if (otherSpec.getRating() && this.rating !== otherSpec.getRating()) return false;
-    return true;
-  }
-}
-
-// Class Movie
-
-class Movie {
-  constructor(serialNumber, price, spec) {
+/* ================== Guitar ================== */
+class Guitar {
+  constructor({ serialNumber, price, builder, model, type, backWood, topWood }) {
     this.serialNumber = serialNumber;
     this.price = price;
-    this.spec = spec;
+    this.builder = builder;
+    this.model = model;
+    this.type = type;
+    this.backWood = backWood;
+    this.topWood = topWood;
   }
-
-  getSerialNumber() { return this.serialNumber; }
-  getPrice() { return this.price; }
-  setPrice(newPrice) { this.price = newPrice; }
-  getSpec() { return this.spec; }
 }
 
-// Class Inventory
-
+/* ================== Inventory ================== */
 class Inventory {
   constructor() {
-    this.movies = [];
+    this.guitars = [];
   }
 
-  addMovie(serialNumber, price, spec) {
-    this.movies.push(new Movie(serialNumber, price, spec));
-  }
-
-  getMovie(serialNumber) {
-    return this.movies.find(
-      movie => movie.getSerialNumber() === serialNumber
-    ) || null;
+  addGuitar(guitarData) {
+    this.guitars.push(new Guitar(guitarData));
   }
 
   search(spec) {
-    return this.movies.filter(
-      movie => movie.getSpec().matches(spec)
+    return this.guitars.filter(g =>
+      (!spec.builder || spec.builder.toLowerCase() === g.builder.toLowerCase()) &&
+      (!spec.model || spec.model.toLowerCase() === g.model.toLowerCase()) &&
+      (!spec.type || spec.type.toLowerCase() === g.type.toLowerCase()) &&
+      (!spec.backWood || spec.backWood.toLowerCase() === g.backWood.toLowerCase()) &&
+      (!spec.topWood || spec.topWood.toLowerCase() === g.topWood.toLowerCase())
     );
   }
 }
 
-// Tampilan Output
-
-function printMovies(movies) {
-  if (movies.length === 0) {
-    console.log("Tidak ada film yang ditemukan.\n");
-    return;
-  }
-
-  movies.forEach((movie, index) => {
-    const spec = movie.getSpec();
-    console.log(`
-Film ${index + 1}
-Judul    : ${spec.getTitle()}
-Studio   : ${spec.getStudio()}
-Genre    : ${spec.getGenre()}
-Director : ${spec.getDirector()}
-Rating   : ${spec.getRating()}
-Harga    : $${movie.getPrice()}
-----------------------------------
-`);
-  });
-}
-
-// Main Program
-
+/* ================== Main ================== */
 const inventory = new Inventory();
 
-inventory.addMovie(
-  "M001",
-  15,
-  new MovieSpec("Warner Bros", "The Dark Knight", "Action", "Christopher Nolan", "PG-13")
-);
+// ===== DATA GITAR (BANYAK) =====
+const guitarDataList = [
+  {
+    serialNumber: "SN001",
+    price: 15000000,
+    builder: "Fender",
+    model: "Stratocaster",
+    type: "Electric",
+    backWood: "Alder",
+    topWood: "Alder"
+  },
+  {
+    serialNumber: "SN002",
+    price: 17000000,
+    builder: "Fender",
+    model: "Telecaster",
+    type: "Electric",
+    backWood: "Ash",
+    topWood: "Ash"
+  },
+  {
+    serialNumber: "SN003",
+    price: 18000000,
+    builder: "Gibson",
+    model: "Les Paul",
+    type: "Electric",
+    backWood: "Mahogany",
+    topWood: "Maple"
+  },
+  {
+    serialNumber: "SN004",
+    price: 20000000,
+    builder: "Gibson",
+    model: "SG",
+    type: "Electric",
+    backWood: "Mahogany",
+    topWood: "Mahogany"
+  },
+  {
+    serialNumber: "SN005",
+    price: 12000000,
+    builder: "Ibanez",
+    model: "RG",
+    type: "Electric",
+    backWood: "Basswood",
+    topWood: "Maple"
+  },
+  {
+    serialNumber: "SN006",
+    price: 14000000,
+    builder: "Ibanez",
+    model: "S Series",
+    type: "Electric",
+    backWood: "Mahogany",
+    topWood: "Maple"
+  },
+  {
+    serialNumber: "SN007",
+    price: 10000000,
+    builder: "Yamaha",
+    model: "Pacifica",
+    type: "Electric",
+    backWood: "Alder",
+    topWood: "Alder"
+  },
+  {
+    serialNumber: "SN008",
+    price: 9000000,
+    builder: "Cort",
+    model: "X Series",
+    type: "Electric",
+    backWood: "Meranti",
+    topWood: "Maple"
+  },
+  {
+    serialNumber: "SN009",
+    price: 13000000,
+    builder: "Taylor",
+    model: "214ce",
+    type: "Acoustic",
+    backWood: "Rosewood",
+    topWood: "Spruce"
+  },
+  {
+    serialNumber: "SN010",
+    price: 11000000,
+    builder: "Martin",
+    model: "D-10E",
+    type: "Acoustic",
+    backWood: "Sapele",
+    topWood: "Spruce"
+  }
+];
 
-inventory.addMovie(
-  "M002",
-  18,
-  new MovieSpec("Paramount", "Interstellar", "Sci-Fi", "Christopher Nolan", "PG-13")
-);
+// Masukkan semua data ke inventory
+guitarDataList.forEach(guitar => inventory.addGuitar(guitar));
 
-inventory.addMovie(
-  "M003",
-  12,
-  new MovieSpec("Universal", "Forrest Gump", "Drama", "Robert Zemeckis", "PG-13")
-);
+// ===== PENCARIAN =====
+const searchSpec = {
+  builder: "Fender",
+  type: "Electric"
+};
 
-inventory.addMovie(
-  "M004",
-  16,
-  new MovieSpec("Marvel Studios", "Avengers Endgame", "Action", "Russo Brothers", "PG-13")
-);
+const results = inventory.search(searchSpec);
 
-inventory.addMovie(
-  "M005",
-  10,
-  new MovieSpec("Pixar", "Toy Story", "Animation", "John Lasseter", "G")
-);
+// ===== OUTPUT =====
+console.log("Hasil Pencarian:");
+console.log("================");
 
-// Cara Pakai
-
-console.log("Semua film Action:");
-printMovies(inventory.search(new MovieSpec(null, null, "Action", null, null)));
-
-console.log("Film Christopher Nolan:");
-printMovies(inventory.search(new MovieSpec(null, null, null, "Christopher Nolan", null)));
-
-console.log("Interstellar ditemukan:");
-printMovies(inventory.search(new MovieSpec("Paramount", "Interstellar", null, null, null)));
+if (!results.length) {
+  console.log("Gitar tidak ditemukan.");
+} else {
+  results.forEach((g, i) => {
+    console.log(
+      `${i + 1}. ${g.builder} ${g.model} | ${g.type} | Rp${g.price}`
+    );
+  });
+}
